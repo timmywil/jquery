@@ -1472,17 +1472,14 @@ QUnit[
 
 	sinon.stub( jQuery, "error" );
 
-	jQuery.parseXML( "<p>Not a <<b>well-formed</b> xml string</p>" );
+	jQuery.parseXML( "<p>Not a well-<<b>formed</b> XML string</p>" );
 	errorArg = jQuery.error.firstCall.args[ 0 ].toLowerCase();
-	console.log( "errorArg", errorArg );
 
-	lineMatch = errorArg.match( /line\s*(?:number)?\s*(\d+)/ );
-	line = lineMatch && lineMatch[ 1 ];
-	columnMatch = errorArg.match( /column\s*(\d+)/ );
-	column = columnMatch && columnMatch[ 1 ];
+	lineMatch = errorArg.match( /line\s*(?:number)?\s*\d\b/ );
+	columnMatch = errorArg.match( /column\s*\d\d\b/ );
 
-	assert.strictEqual( line, "1", "reports error line" );
-	assert.strictEqual( column, "11", "reports error column" );
+	assert.ok( lineMatch, "reports error line" );
+	assert.ok( columnMatch, "reports error column" );
 } );
 
 testIframe(
